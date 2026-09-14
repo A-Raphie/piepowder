@@ -232,3 +232,101 @@ input.court-input {
 input.court-input:focus {
   border-color: var(--ink-faint);
 }
+
+/* ---------------------------------------------------------------------------
+   LINEN — the document register (structural, not just a colour swap).
+   mandate's grammar: the page is a court RECORD, not a dashboard. Sections
+   are ruled (2px top rule, hairline below), not boxed. Verdicts are
+   letterspaced record lines, not display words. Actions are underlined
+   text, not filled buttons. Everything squares off.
+--------------------------------------------------------------------------- */
+
+[data-theme="linen"] body {
+  line-height: 1.65;
+}
+
+[data-theme="linen"] .page {
+  max-width: 52rem;
+  padding-top: 2.5rem;
+}
+
+[data-theme="linen"] header.hairline-b {
+  border-bottom: none;
+  box-shadow: 0 1px 0 var(--hairline), 0 4px 0 -3px var(--hairline);
+}
+
+[data-theme="linen"] .display {
+  font-size: 1.9rem;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+}
+
+[data-theme="linen"] .verdict-word {
+  font-size: 2.1rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  padding: 0.5rem 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--hairline);
+}
+
+[data-theme="linen"] .card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--hairline);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+[data-theme="linen"] .rowlink {
+  border-top: 1px solid var(--hairline);
+  border-bottom: none;
+  border-radius: 0;
+  background: transparent;
+}
+[data-theme="linen"] .rowlink:hover {
+  border-color: var(--ink-muted);
+}
+
+[data-theme="linen"] .pill {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0 0.25rem 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+[data-theme="linen"] .btn {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 0.15rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+[data-theme="linen"] .btn:hover {
+  opacity: 0.75;
+}
+[data-theme="linen"] .btn-primary {
+  background: transparent;
+  color: var(--ink);
+  text-decoration-thickness: 2px;
+  font-weight: 600;
+}
+
+[data-theme="linen"] input.court-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink-muted);
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+[data-theme="linen"] .eyebrow {
+  letter-spacing: 0.22em;
+}
