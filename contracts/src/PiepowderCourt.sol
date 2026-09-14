@@ -5,8 +5,8 @@ pragma solidity ^0.8.24;
 /// @notice A buyer locks escrow on a case. The auditor (Piepowder's signer) stamps an
 /// evidence-grounded verdict, then settles: APPROVED releases escrow to the hired agent,
 /// REJECTED refunds the buyer. Every step is an event; the court surface is a pure chain reader.
-/// @dev Verdicts are settlement artifacts: evidenceHash commits to the evidence bundle
-/// (replay logs, receipts, contract reads) published off-chain at the case dossier.
+/// @dev The case registry (caseCount/caseAt) + full struct reads exist so the public docket
+/// needs NO event scanning — several public RPCs cap eth_getLogs to tiny block ranges.
 contract PiepowderCourt {
     enum Verdict {
         None,
@@ -24,16 +24,22 @@ contract PiepowderCourt {
         Phase phase;
         Verdict verdict;
         bytes32 evidenceHash;
+        bytes32 taskSpecHash;
+        string reason;
         address buyer;
         address worker;
         uint256 escrow;
         uint64 openedAt;
         uint64 settledAt;
+        uint64 openBlock;
+        uint64 stampBlock;
+        uint64 settleBlock;
     }
 
     address public immutable auditor;
 
     mapping(bytes32 => Case) public cases;
+    bytes32[] private _caseIds;
 
     event CaseOpened(bytes32 indexed caseId, address indexed buyer, address indexed worker, bytes32 taskSpecHash, uint256 escrow);
     event VerdictStamped(bytes32 indexed caseId, Verdict verdict, bytes32 evidenceHash, string reason);
@@ -52,6 +58,16 @@ contract PiepowderCourt {
         _;
     }
 
+    /// @notice Number of cases ever opened — the docket's index.
+    function caseCount() external view returns (uint256) {
+        return _caseIds.length;
+    }
+
+    /// @notice The i-th case ever opened, oldest first.
+    function caseAt(uint256 i) external view returns (bytes32) {
+        return _caseIds[i];
+    }
+
     /// @notice Buyer opens a case and locks escrow. caseId binds the task spec + parties + nonce.
     function openCase(bytes32 caseId, address worker, bytes32 taskSpecHash) external payable {
         if (msg.value == 0) revert BadPhase();
@@ -61,12 +77,18 @@ contract PiepowderCourt {
             phase: Phase.Open,
             verdict: Verdict.None,
             evidenceHash: bytes32(0),
+            taskSpecHash: taskSpecHash,
+            reason: "",
             buyer: msg.sender,
             worker: worker,
             escrow: msg.value,
             openedAt: uint64(block.timestamp),
-            settledAt: 0
+            settledAt: 0,
+            openBlock: uint64(block.number),
+            stampBlock: 0,
+            settleBlock: 0
         });
+        _caseIds.push(caseId);
         emit CaseOpened(caseId, msg.sender, worker, taskSpecHash, msg.value);
     }
 
@@ -78,6 +100,8 @@ contract PiepowderCourt {
         c.phase = Phase.Verdict;
         c.verdict = verdict;
         c.evidenceHash = evidenceHash;
+        c.reason = reason;
+        c.stampBlock = uint64(block.number);
         emit VerdictStamped(caseId, verdict, evidenceHash, reason);
     }
 
@@ -87,6 +111,7 @@ contract PiepowderCourt {
         if (c.phase != Phase.Verdict) revert BadPhase();
         c.phase = Phase.Settled;
         c.settledAt = uint64(block.timestamp);
+        c.settleBlock = uint64(block.number);
         uint256 amt = c.escrow;
         c.escrow = 0;
         bool released = c.verdict == Verdict.Approved;
@@ -100,21 +125,8 @@ contract PiepowderCourt {
         emit CaseSettled(caseId, c.verdict, amt, released);
     }
 
-    function getCase(bytes32 caseId)
-        external
-        view
-        returns (
-            Phase phase,
-            Verdict verdict,
-            bytes32 evidenceHash,
-            address buyer,
-            address worker,
-            uint256 escrow,
-            uint64 openedAt,
-            uint64 settledAt
-        )
-    {
-        Case storage c = cases[caseId];
-        return (c.phase, c.verdict, c.evidenceHash, c.buyer, c.worker, c.escrow, c.openedAt, c.settledAt);
+    /// @notice Full case record — everything the docket and dossier render.
+    function getCase(bytes32 caseId) external view returns (Case memory) {
+        return cases[caseId];
     }
 }

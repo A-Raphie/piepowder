@@ -22,11 +22,31 @@ contract PiepowderCourtTest is Test {
         return caseId;
     }
 
-    function test_open_locks_escrow() public {
+    function test_open_locks_escrow_and_registers() public {
         bytes32 caseId = _open();
-        (PiepowderCourt.Phase phase,,,,, uint256 escrow,,) = court.getCase(caseId);
-        assertEq(uint8(phase), uint8(PiepowderCourt.Phase.Open));
-        assertEq(escrow, 0.5 ether);
+        PiepowderCourt.Case memory c = court.getCase(caseId);
+        assertEq(uint8(c.phase), uint8(PiepowderCourt.Phase.Open));
+        assertEq(c.escrow, 0.5 ether);
+        assertEq(c.buyer, buyer);
+        assertEq(c.worker, worker);
+        assertGt(c.openBlock, 0);
+        assertEq(court.caseCount(), 1);
+        assertEq(court.caseAt(0), caseId);
+    }
+
+    function test_open_rejects_bad_inputs() public {
+        vm.deal(buyer, 1 ether);
+        vm.prank(buyer);
+        vm.expectRevert(PiepowderCourt.BadPhase.selector);
+        court.openCase{value: 0}(keccak256("x"), worker, keccak256("s"));
+        vm.prank(buyer);
+        vm.expectRevert(PiepowderCourt.BadPhase.selector);
+        court.openCase{value: 0.1 ether}(keccak256("y"), buyer, keccak256("s"));
+        vm.prank(buyer);
+        court.openCase{value: 0.1 ether}(keccak256("z"), worker, keccak256("s"));
+        vm.prank(buyer);
+        vm.expectRevert(PiepowderCourt.BadPhase.selector);
+        court.openCase{value: 0.1 ether}(keccak256("z"), worker, keccak256("s"));
     }
 
     function test_only_auditor_can_stamp() public {
@@ -43,11 +63,13 @@ contract PiepowderCourtTest is Test {
         uint256 before = buyer.balance;
         vm.prank(address(court.auditor()));
         court.settle(caseId);
-        (PiepowderCourt.Phase phase, PiepowderCourt.Verdict verdict,,,, uint256 escrow,, uint64 settledAt) = court.getCase(caseId);
-        assertEq(uint8(phase), uint8(PiepowderCourt.Phase.Settled));
-        assertEq(uint8(verdict), uint8(PiepowderCourt.Verdict.Rejected));
-        assertEq(escrow, 0);
-        assertGt(settledAt, 0);
+        PiepowderCourt.Case memory c = court.getCase(caseId);
+        assertEq(uint8(c.phase), uint8(PiepowderCourt.Phase.Settled));
+        assertEq(uint8(c.verdict), uint8(PiepowderCourt.Verdict.Rejected));
+        assertEq(c.escrow, 0);
+        assertGt(c.settledAt, 0);
+        assertEq(bytes(c.reason).length > 0, true);
+        assertGt(c.settleBlock, 0);
         assertEq(buyer.balance, before + 0.5 ether);
         assertEq(worker.balance, 0);
     }
@@ -59,8 +81,9 @@ contract PiepowderCourtTest is Test {
         vm.prank(address(court.auditor()));
         court.settle(caseId);
         assertEq(worker.balance, 0.5 ether);
-        (,,, address buyerAddr,,,,) = court.getCase(caseId);
-        assertEq(buyerAddr, buyer);
+        PiepowderCourt.Case memory c = court.getCase(caseId);
+        assertEq(c.buyer, buyer);
+        assertGt(c.stampBlock, 0);
     }
 
     function test_cannot_stamp_twice() public {
