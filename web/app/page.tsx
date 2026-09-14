@@ -54,7 +54,7 @@ export default async function DocketPage() {
         ) : cases.length === 0 ? (
           <p className="micro mt-4">◍ no cases on the docket yet — open one from the court contract</p>
         ) : (
-          <div className="mt-4 flex flex-col gap-2.5">
+          <div className="docket-list mt-4 flex flex-col">
             {cases.map((c) => (
               <DocketRow key={c.caseId} c={c} />
             ))}

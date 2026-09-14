@@ -46,10 +46,10 @@ export function VerdictBanner({ c }: { c: CourtCase }) {
   );
 }
 
-/** Compact ledger row — the docket line. Whole row is the link. */
+/** Register row — the docket line (linen grammar on noir tokens). Whole row is the link. */
 export function DocketRow({ c }: { c: CourtCase }) {
   return (
-    <Link href={`/d/${c.caseId}`} className={`rowlink card ${edgeClass(c)} px-5 py-4 no-underline`} style={{ color: "var(--ink)" }}>
+    <Link href={`/d/${c.caseId}`} className={`rowlink ${edgeClass(c)} px-5 py-4 no-underline`} style={{ color: "var(--ink)" }}>
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <span className={`mono text-sm ${c.verdict === "Approved" && c.phase === "Settled" ? "glyph-approved" : c.verdict === "Rejected" && c.phase === "Settled" ? "glyph-rejected" : "glyph-pending"}`}>

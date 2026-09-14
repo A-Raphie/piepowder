@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { chainName, courtAddress } from "@/lib/chain";
 import { short } from "@/lib/court";
 import "./globals.css";
@@ -21,14 +20,9 @@ export const metadata: Metadata = {
   },
 };
 
-const themeBootstrap = `try{var t=localStorage.getItem("court-theme");if(t==="linen"||t==="noir"){document.documentElement.dataset.theme=t}}catch(e){}`;
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="noir" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
-      </head>
+    <html lang="en">
       <body className={`${geist.variable} ${geistMono.variable} ${spaceGrotesk.variable}`}>
         <header className="hairline-b">
           <div className="page flex items-center justify-between py-4">
@@ -45,12 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Link>
               </nav>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="pill pill-pending hidden sm:inline-flex">
-                X Layer {chainName === "mainnet" ? "196" : "1952"} · court {short(courtAddress[chainName], 4)}
-              </span>
-              <ThemeToggle />
-            </div>
+            <span className="pill pill-pending hidden sm:inline-flex">
+              X Layer {chainName === "mainnet" ? "196" : "1952"} · court {short(courtAddress[chainName], 4)}
+            </span>
           </div>
         </header>
         <main>{children}</main>

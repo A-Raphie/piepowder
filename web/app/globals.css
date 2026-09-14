@@ -1,21 +1,15 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   PIEPOWDER COURT — two candidate canvases, one component tree.
-   The court reads as an instrument in both. Pick with the header toggle:
-   the verdict semantics (APPROVED/REJECTED) are the only saturated colour
-   in either, per fief D1/D8: icon + label + border + fill, greyscale-safe.
-
-   NOIR  — cool noir ground (hue ~280), warm cream ink (hue ~85), hairline
-           elevation, Space Grotesk display. The dashboard register.
-   LINEN — linen canvas, paper-white cards, espresso ink, eyebrow headings.
-           The document register: the page reads as a court record.
-
-   Both: elevation is a 1px hairline and nothing else — no drop shadows.
+   PIEPOWDER COURT — noir canvas with a document-register docket.
+   Verdict from the two-canvas bake-off (Sep 14): NOIR dashboard register is
+   the site; the docket keeps LINEN's ruled-register grammar. Elevation is a
+   1px hairline and nothing else — no drop shadows. Green/red are reserved
+   exclusively for APPROVED/REJECTED (glyph + label + border + fill, so it
+   survives greyscale — fief D1/D8).
 --------------------------------------------------------------------------- */
 
-:root,
-[data-theme="noir"] {
+:root {
   --ground: oklch(0.165 0.014 280);
   --surface: oklch(0.205 0.014 280);
   --surface-2: oklch(0.25 0.014 280);
@@ -33,23 +27,6 @@
   --word-size: 4.5rem;
 }
 
-[data-theme="linen"] {
-  --ground: oklch(0.952 0.014 88);
-  --surface: oklch(0.982 0.007 88);
-  --surface-2: oklch(0.938 0.014 88);
-  --ink: oklch(0.29 0.035 65);
-  --ink-muted: oklch(0.47 0.026 65);
-  --ink-faint: oklch(0.62 0.02 65);
-  --hairline: oklch(0.85 0.014 88);
-  --accepted: oklch(0.54 0.1 152);
-  --accepted-fg: oklch(0.45 0.1 152);
-  --accepted-surface: oklch(0.54 0.1 152 / 0.09);
-  --rejected: oklch(0.5 0.1 25);
-  --rejected-fg: oklch(0.44 0.1 25);
-  --rejected-surface: oklch(0.5 0.1 25 / 0.09);
-  --pending: oklch(0.55 0.008 65);
-  --word-size: 3.6rem;
-}
 
 * {
   box-sizing: border-box;
@@ -127,10 +104,17 @@ body {
 
 .rowlink {
   display: block;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--hairline);
+  border-radius: 0;
   transition: border-color 120ms ease;
 }
+.docket-list {
+  border-bottom: 1px solid var(--hairline);
+}
 .rowlink:hover {
-  border-color: var(--ink-faint);
+  border-top-color: var(--ink-faint);
 }
 
 /* --- verdict semantics (the only saturated colour in the product) --------- */
@@ -231,102 +215,4 @@ input.court-input {
 }
 input.court-input:focus {
   border-color: var(--ink-faint);
-}
-
-/* ---------------------------------------------------------------------------
-   LINEN — the document register (structural, not just a colour swap).
-   mandate's grammar: the page is a court RECORD, not a dashboard. Sections
-   are ruled (2px top rule, hairline below), not boxed. Verdicts are
-   letterspaced record lines, not display words. Actions are underlined
-   text, not filled buttons. Everything squares off.
---------------------------------------------------------------------------- */
-
-[data-theme="linen"] body {
-  line-height: 1.65;
-}
-
-[data-theme="linen"] .page {
-  max-width: 52rem;
-  padding-top: 2.5rem;
-}
-
-[data-theme="linen"] header.hairline-b {
-  border-bottom: none;
-  box-shadow: 0 1px 0 var(--hairline), 0 4px 0 -3px var(--hairline);
-}
-
-[data-theme="linen"] .display {
-  font-size: 1.9rem;
-  letter-spacing: 0.01em;
-  font-weight: 600;
-}
-
-[data-theme="linen"] .verdict-word {
-  font-size: 2.1rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  padding: 0.5rem 0;
-  border-top: 2px solid var(--ink);
-  border-bottom: 1px solid var(--hairline);
-}
-
-[data-theme="linen"] .card {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  border-top: 2px solid var(--ink);
-  border-bottom: 1px solid var(--hairline);
-  padding-left: 0;
-  padding-right: 0;
-}
-
-[data-theme="linen"] .rowlink {
-  border-top: 1px solid var(--hairline);
-  border-bottom: none;
-  border-radius: 0;
-  background: transparent;
-}
-[data-theme="linen"] .rowlink:hover {
-  border-color: var(--ink-muted);
-}
-
-[data-theme="linen"] .pill {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0 0.25rem 0 0;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-[data-theme="linen"] .btn {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0 0 0.15rem;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1px;
-}
-[data-theme="linen"] .btn:hover {
-  opacity: 0.75;
-}
-[data-theme="linen"] .btn-primary {
-  background: transparent;
-  color: var(--ink);
-  text-decoration-thickness: 2px;
-  font-weight: 600;
-}
-
-[data-theme="linen"] input.court-input {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--ink-muted);
-  border-radius: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-[data-theme="linen"] .eyebrow {
-  letter-spacing: 0.22em;
 }
