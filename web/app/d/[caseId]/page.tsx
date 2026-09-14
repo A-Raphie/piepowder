@@ -96,8 +96,12 @@ export default async function CaseDossier({ params }: { params: Promise<{ caseId
               <HashRow label="Evidence digest (onchain)" hash={c.evidenceHash} />
               <HashRow label="Task spec digest" hash={c.taskSpecHash} />
               <p className="micro mt-3">
-                The digest is stamped on X Layer; the full check-by-check bundle it commits to publishes
-                alongside the audit engine. The court verifies the commitment, the dossier shows the work.
+                The digest is stamped on X Layer. The engine is deterministic, so the full check-by-check
+                bundle is re-derived from it —{" "}
+                <a href={`/api/evidence/${c.caseId}`} target="_blank" rel="noreferrer" className="underline" style={{ color: "var(--ink-muted)" }}>
+                  read the evidence bundle ↗
+                </a>{" "}
+                and compare its digest to the one above.
               </p>
             </>
           ) : (

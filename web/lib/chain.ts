@@ -90,6 +90,36 @@ export const COURT_ABI = [
     outputs: [{ type: "address" }],
   },
   {
+    type: "function",
+    name: "openCase",
+    stateMutability: "payable",
+    inputs: [
+      { name: "caseId", type: "bytes32" },
+      { name: "worker", type: "address" },
+      { name: "taskSpecHash", type: "bytes32" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "stamp",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "caseId", type: "bytes32" },
+      { name: "verdict", type: "uint8" },
+      { name: "evidenceHash", type: "bytes32" },
+      { name: "reason", type: "string" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "settle",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "caseId", type: "bytes32" }],
+    outputs: [],
+  },
+  {
     type: "event",
     name: "CaseOpened",
     inputs: [

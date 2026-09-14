@@ -37,6 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/verify" className="no-underline" style={{ color: "var(--ink-muted)" }}>
                   Verify
                 </Link>
+                <Link href="/run" className="no-underline" style={{ color: "var(--ink-muted)" }}>
+                  Run
+                </Link>
               </nav>
             </div>
             <span className="pill pill-pending hidden sm:inline-flex">
