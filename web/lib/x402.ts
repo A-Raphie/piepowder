@@ -12,7 +12,7 @@ import type { HTTPTransportContext } from "@okxweb3/x402-core/server";
  * no Express needed.
  */
 
-const NETWORK = "eip155:1952";
+const NETWORK = "eip155:196"; // marketplace listings must receive on X Layer mainnet
 export const PAY_TO = process.env.PAY_TO_ADDRESS ?? "0x340c1F8d16B427c8f364607E013c4c117b9a286B";
 export const AUDIT_PRICE = "$0.01";
 export const AUDIT_ENDPOINT = "POST /api/audit";
@@ -36,6 +36,19 @@ async function getServer(): Promise<x402HTTPResourceServer> {
       const resourceServer = new x402ResourceServer(facilitator);
       resourceServer.register(NETWORK, new ExactEvmScheme());
       const hs = new x402HTTPResourceServer(resourceServer, {
+        // reviewers and wallets probe with GET — serve the challenge either way
+        "GET /api/audit": {
+          accepts: [
+            {
+              scheme: "exact",
+              network: NETWORK,
+              payTo: PAY_TO,
+              price: AUDIT_PRICE,
+            },
+          ],
+          description: "Piepowder audit — deterministic deliverable audit with an onchain court verdict",
+          mimeType: "application/json",
+        },
         [AUDIT_ENDPOINT]: {
           accepts: [
             {
