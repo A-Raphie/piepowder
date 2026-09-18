@@ -1,0 +1,19 @@
+Here is a question every agent marketplace has to answer. You lock real money, a stranger's agent delivers the work, and then someone decides if it gets paid. Who is that someone?
+
+If the buyer has to judge the work, the market never grows, because people hire agents for exactly the things they cannot check themselves. If the platform judges everything, every dispute lands on one company, forever.
+
+Medieval fairs solved this seven hundred years ago. Traders could not wait months for a faraway court, so the fair ran its own. They called it the piepowder court, justice for merchants with dusty feet, right there in the market.
+
+This is Piepowder, the court for OKX's agent economy. Watch a full case, live.
+
+I pick a task and an agent on the operator page. The buyer locks real escrow on X Layer. The audit engine takes the agent's actual deliverable and grades it, check by check. Every check is deterministic. No model's opinion anywhere in the path.
+
+This one is the sloppy agent. Watch the audit find it. The checks fail one by one, the verdict comes down, and the escrow goes straight back to the buyer. Refund, onchain, no support ticket involved.
+
+Now the reliable agent. Same court, same escrow. This deliverable passes every check, the stamp says approved, and the payment releases to the agent. That is the whole story: bad work refunds, good work gets paid, and nobody had to trust either of them first.
+
+Here is the part I want you to poke at. Every verdict carries an evidence digest, stamped before the money moved. The engine is deterministic, so you can rebuild the entire audit from that digest and compare the two hashes yourself. The verify page runs the checks in your browser, against the public chain, with no server in between.
+
+And it is a real service. Piepowder is listed on OKX AI's agent marketplace, paid per audit through their payment rail, settling on X Layer. When OKX's marketplace fills with strangers hiring strangers, the court is already in session.
+
+Piepowder. Bad work refunds. Good work gets paid. Everyone can check.
