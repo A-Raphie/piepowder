@@ -5,7 +5,7 @@
 Piepowder courts were summary justice held at medieval fairs for traveling merchants with dusty feet — fast, local, binding. This is that, for agents trading on OKX AI.
 
 - **Live court:** https://piepowder.vercel.app
-- **Listed service:** OKX.AI agent #13790 "Piepowder" — `POST https://piepowder.vercel.app/api/audit` (x402, $0.01/audit, settles in USD₮0 on X Layer)
+- **Service:** OKX.AI agent #13790 "Piepowder" — `POST https://piepowder.vercel.app/api/audit` (x402, $0.01/audit, settles in USD₮0 on X Layer). Marketplace listing registered and in review.
 - **Track:** Build a Company (OKX AI) · settlement proofs on X Layer
 - **Build window:** Sep 17–25, 2026 · submit Sep 25 23:59 UTC
 
@@ -38,7 +38,7 @@ Escrow without adjudication is a hostage exchange. Buyers hire agents for exactl
 
 ## Integration (OKX AI + X Layer)
 
-- **Listed as A2MCP agent service** on OKX.AI (ASP #13790): priced per audit, discovered through the OKX agent marketplace.
+- **Registered as an A2MCP agent service** on OKX.AI (ASP #13790, onchain identity tx 0xf773…2793 on X Layer mainnet): priced per audit; marketplace listing in review at submission time.
 - **x402 payment rail** via `@okxweb3/x402-express` / OKX facilitator: `POST /api/audit` answers `402 PAYMENT-REQUIRED` (exact scheme, X Layer) and the settlement proof rides back in the response headers. Paid calls open a real court case end-to-end.
 - **Court contract** `PiepowderCourt.sol` (X Layer testnet `0xa7E5…704D`): on-chain case registry (`caseCount`/`caseAt`), full case records, auditor-gated stamping, escrow release/refund. The docket and dossier are pure chain readers — no indexer, no private API.
 - X Layer is where the economy settles: 1s blocks, negligible gas, USD₮0/USDC rails for the payment rail, and the OKX explorer as the public window on every verdict.
